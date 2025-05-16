@@ -64,6 +64,7 @@ GraphModel::GraphModel(const std::string &filepath, long double scalingFactor) {
 void GraphModel::generate(GraphWriter &writer) {
     // Generate k random Edges for every color, with k = this->nbr_edges[color]:
     for (const auto &[color, cts]: this->nbr_edges) {
+        std::cout << "\tGenerating " << cts << " edges for the subgraph '" << color << "'... ";
 
         #pragma omp parallel for
         for (int i = 0; i < cts; ++i) {
@@ -75,16 +76,18 @@ void GraphModel::generate(GraphWriter &writer) {
                                        this->nodes[end_type].get_target_node(color));
 
         }
-
+        std::cout << "OK." << std::endl;
     }
+    std::cout << std::endl;
 
     // Write alle nodes to a file
     for (const auto &[nodetype, node]: this->nodes) {
+        #pragma omp parallel for
         for (NodeID i = node.get_offset(); i < node.get_offset() + node.get_size(); ++i) {
             writer.writeNode(nodetype, i);
         }
 
-        std::cout << "Nodetype '" << nodetype << "': "
-        << node.get_offset() << "-" << node.get_offset() + node.get_size() - 1 << std::endl;
+        std::cout << "\tNodetype '" << nodetype << "' between ID "
+        << node.get_offset() << " and " << node.get_offset() + node.get_size() - 1 << std::endl;
     }
 }

@@ -31,7 +31,7 @@ using probability = double;
 template<typename T>
 class AliasTable {
 private:
-    long long size;
+    unsigned long long size;
 
     std::mt19937 gen;
     std::uniform_real_distribution<double> distr;
@@ -44,7 +44,7 @@ public:
 
     AliasTable();
 
-    T getElement();
+    T& getElement();
 };
 
 // Default initialization. Initializes the Table with the Default-Value for the given Type T.
@@ -68,7 +68,7 @@ AliasTable<T>::AliasTable(std::vector<std::pair<probability, T> > elements) {
     std::queue<std::pair<probability, T> > larger;
     double avg_prob = 1.0f / this->size;
 
-    for (int i = 0; i < this->size; i++) {
+    for (unsigned long long i = 0; i < this->size; i++) {
         if (elements[i].first < avg_prob) {
             smaller.push(elements[i]);
         } else {
@@ -126,7 +126,7 @@ AliasTable<T>::AliasTable(std::vector<std::pair<probability, T> > elements) {
 
 
 template<typename T>
-T AliasTable<T>::getElement() {
+T& AliasTable<T>::getElement() {
     probability r_idx = this->distr(this->gen);
     probability r_bias = this->distr(this->gen);
     int idx = static_cast<int>(std::floor(this->size * r_idx));

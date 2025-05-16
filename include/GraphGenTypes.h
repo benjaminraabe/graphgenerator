@@ -179,6 +179,8 @@ class BenchmarkWriter : public GraphWriter {
         void startTimer();
         float stopTimer() const;
 
+        void info(float elapsed_time) const;
+
         unsigned long long get_generated_edge_size() const;
         unsigned long long get_generated_node_size() const;
 

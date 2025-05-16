@@ -69,6 +69,11 @@ float BenchmarkWriter::stopTimer() const {
     return std::chrono::duration_cast<std::chrono::duration<float>>(end - this->start_time).count();
 }
 
+void BenchmarkWriter::info(const float elapsed_time) const {
+    double rate = static_cast<float>(this->get_generated_edge_size() + this->get_generated_node_size()) / elapsed_time / 1000000000.0;
+    std::cout << "\nEdge-Generation took " << elapsed_time << " seconds @ " << rate << " GB/s." << std::endl;
+}
+
 unsigned long long BenchmarkWriter::get_generated_edge_size() const {
     return this->write_size_edges;
 }
